@@ -1,7 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>TPP.ApiListener</PackageId>
+    <Authors>m4_used_rollout</Authors>
+    <Company>TwitchPlaysPokemon</Company>
+    <Description>Basic Rest API Framework</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>2019 TwitchPlaysPokemon</Copyright>
+    <RepositoryUrl>https://github.com/TwitchPlaysPokemon/ApiListener</RepositoryUrl>
+    <PackageReleaseNotes>Allow restarting of ApiListener</PackageReleaseNotes>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

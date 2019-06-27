@@ -10,7 +10,8 @@ namespace ApiListener
     // TODO: Command namespaces?
     public static class ApiListener
     {
-        private static HttpListener HttpListener = new HttpListener();
+        private static HttpListener HttpListener;
+        private static IAsyncResult result;
 
         public static void Start(int port)
         {
@@ -18,6 +19,8 @@ namespace ApiListener
             {
                 throw new Exception("HTTPListener is not supported on this system.");
             }
+			if (HttpListener == null)
+				HttpListener = new HttpListener();
             if (Commands == null)
             {
                 Init();
@@ -39,19 +42,28 @@ namespace ApiListener
         {
             Log(Info("Stopping."));
             HttpListener.Stop();
+            HttpListener = null;
         }
 
         public static void HardStop()
         {
             Log(Info("Abandoning all connections and stopping."));
             HttpListener.Abort();
+            HttpListener = null;
         }
 
-        private static void Listen() => HttpListener.BeginGetContext(HttpListenHandler, HttpListener);
+        private static void Listen()
+        {
+	        result = HttpListener.BeginGetContext(HttpListenHandler, HttpListener);
+		}
 
         private static void HttpListenHandler(IAsyncResult result)
         {
             HttpListenerContext context = null;
+            if (HttpListener == null)
+	            return;
+            if (result != ApiListener.result)
+	            return;
             try
             {
                 context = HttpListener.EndGetContext(result);
@@ -132,7 +144,13 @@ namespace ApiListener
             }
             finally
             {
-                Listen();
+	            try
+	            {
+		            if (HttpListener.IsListening)
+			            Listen();
+	            }
+				catch(ObjectDisposedException)
+				{ }
             }
         }
 
